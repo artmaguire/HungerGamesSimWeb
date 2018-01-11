@@ -1,0 +1,53 @@
+body {
+	padding-top: 80px;
+}
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 60px !important;
+    height: 60px !important;
+    padding-top: 0px !important;
+}
+
+.form-control {
+    height: 30px !important;
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
+}
+
+label {
+    font-size: 14px !important;
+    margin-right: 5px !important;
+    font-weight: 300 !important;
+}
+
+.line{
+    margin-bottom: 1px !important;
+    margin-top: 15px !important;
+}
+
+.districtRow {
+    border: 1px solid grey;
+    border-radius: 2px;
+}
+
+.districtContainer {
+    height: 72px;
+    border: 1px solid #58697a;
+    border-radius: 2px;
+    display: table;
+}
+
+.genderContainer {
+    display: table;
+    height: 34px;
+}
+
+.verticalAlignName {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.ageInput {
+    width: 60px !important;
+}

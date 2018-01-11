@@ -12,7 +12,7 @@ and open the template in the editor.
         <link rel = "stylesheet" type = "text/css" href = "css/style.css" />
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css" rel="stylesheet" integrity="sha384-Xqcy5ttufkC3rBa8EdiAyA1VgOGrmel2Y+wxm4K3kI3fcjTWlDWrlnxyD6hOi3PF" crossorigin="anonymous">
 
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -21,24 +21,59 @@ and open the template in the editor.
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <!--<nav class="navbar navbar-expand-sm bg-light navbar-light">
-            <h1 class="navbar-brand mb-0">Navbar</h1>
-        </nav>-->
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav style="background-color: #243648" class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Art's Hunger Games Simulator</a>
             </div>
         </nav>
-        <form class="form-inline" action="./AddPlayers">
-            <div class="form-group">
-                <label>First Name:</label>
-                <input class="form-control" id="firstName">
+        <div class="container">
+            <div class="row">
+                <form class="form-inline col-xs-12 col-md-6" action="./AddPlayers">
+                    <div class="container">
+                        <div class="row districtRow well well-sm">
+                            <div class="districtContainer col-xs-12 col-md-1">
+                                <div class="verticalAlignName">
+                                    District 1
+                                </div>
+                            </div>
+                            <div class="genderContainer col-xs-12 col-md-1">
+                                <label class="verticalAlignName">Female</label>
+                            </div>
+                            <div class="form-group col-xs-12 col-md-4">
+                                <label>First Name:</label>
+                                <input class="form-control" id="firstName">
+                            </div>
+                            <div class="form-group col-xs-12 col-md-4">
+                                <label>Last Name:</label>
+                                <input class="form-control" id="lastName">
+                            </div>
+                            <div class="form-group col-xs-12 col-md-2">
+                                <label>Age:</label>
+                                <input class="form-control ageInput" id="age" type="number" pattern="\d*">
+                            </div>
+                            <br>
+                            <hr class="line">
+                            <div class="genderContainer col-xs-12 col-md-1">
+                                <label class="verticalAlignName"> Male</label>
+                            </div>
+                            <div class="form-group col-xs-12 col-md-4">
+                                <label>First Name:</label>
+                                <input class="form-control" id="firstName">
+                            </div>
+                            <div class="form-group col-xs-12 col-md-4">
+                                <label>Last Name:</label>
+                                <input class="form-control" id="lastName">
+                            </div>
+                            <div class="form-group col-xs-12 col-md-2">
+                                <label>Age:</label>
+                                <input class="form-control ageInput" id="age" type="number" pattern="\d*">
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Last Name:</label>
-                <input class="form-control" id="lastName">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
+        </div>
     </body>
 </html>
