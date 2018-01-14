@@ -27,11 +27,6 @@ $( document ).ready(function() {
             createPersonStatus(districts[i], 'female');
             createPersonStatus(districts[i], 'male');
         }
-
-        var person = districts[5].getPerson('female');
-        person.addKill();
-        person.addKill();
-        person.kill();
     }
 
     function createNewDistrict() {
