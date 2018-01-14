@@ -16,6 +16,9 @@ and open the template in the editor.
 
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/Person.js"></script>
+        <script src="js/District.js"></script>
+        <script src="js/script.js"></script>
 
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -30,57 +33,92 @@ and open the template in the editor.
         </nav>
         <div class="container">
             <div class="row">
-                <form class="form-inline" action="./AddPlayers">
-                    <div class="row districtRow">
-                        <div class="well well-sm col-xs-12">
-                            <div class="districtContainer col-xs-12 col-lg-1">
-                                <div class="verticalAlignName" style="text-align: center">
-                                    District 1
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-11 femaleBlockBorder">
-                                <div class="genderContainer genderBorder col-xs-12 col-lg-1">
-                                    <label class="verticalAlignName">Female</label>
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-4">
-                                    <label class="col-sm-4 floatNone">First Name:</label>
-                                    <input class="form-control col-sm-8 floatNone" id="firstName">
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-4">
-                                    <label class="col-sm-4 floatNone">Last Name:</label>
-                                    <input class="form-control col-sm-8 floatNone" id="lastName">
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-2">
-                                    <label class="col-sm-4 floatNone">Age:</label>
-                                    <input class="form-control ageInput col-sm-8 floatNone" id="age" type="number">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-11">
-                                <div class="genderContainer genderBorder col-xs-12 col-lg-1">
-                                    <label class="verticalAlignName">Male</label>
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-4">
-                                    <label class="col-sm-4 floatNone">First Name:</label>
-                                    <input class="form-control col-sm-8 floatNone" id="firstName">
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-4">
-                                    <label class="col-sm-4 floatNone">Last Name:</label>
-                                    <input class="form-control col-sm-8 floatNone" id="lastName">
-                                </div>
-                                <div class="form-group col-xs-12 col-lg-2">
-                                    <label class="col-sm-4 floatNone">Age:</label>
-                                    <input class="form-control ageInput col-sm-8 floatNone" id="age" type="number">
-                                </div>
-                            </div>
-                        </div>
+                <div class="form-inline" id="peopleForm">
+                    <div id="districtsContainer">
                     </div>
                     <div class="row">
-                        <button type="button" class="btn btn-default mainBtn"><span class="glyphicon glyphicon-plus pull-right"></span>Add Another</button>
-                        <button type="button" class="btn btn-default mainBtn mainButtonMargin"><span class="glyphicon glyphicon-th-list pull-right"></span>Autocomplete</button>
-                        <button type="submit" class="btn btn-default disabled mainBtn mainButtonMargin" disabled="disabled"><span class="glyphicon glyphicon-log-in pull-right"></span>Submit</button>
+                        <button type="button" class="btn btn-default mainBtn" id="addAnother"><span class="glyphicon glyphicon-plus pull-right"></span>Add Another</button>
+                        <button type="button" class="btn btn-default mainBtn mainButtonMargin" id="autocomplete"><span class="glyphicon glyphicon-th-list pull-right"></span>Autocomplete</button>
+                        <button type="button" class="btn btn-default mainBtn mainButtonMargin" id="submitPeople" disabled="disabled"><span class="glyphicon glyphicon-log-in pull-right"></span>Submit</button>
                     </div>
-                </form>
+                </div>
+                <div class="row" id="fightScreen" style="display:none;">
+                    <div class="col-xs-8">
+                        <div class="col-xs-12"><h2>Game Events:</h2></div>
+                        <div class="col-xs-12 fightLog borderBox" id="fightLog">The Contenders Take Their Places.</div>
+                        <div id="beginFightButtons">
+                            <button type="button" class="btn btn-default col-xs-3" id="editPeople">Edit Players</button>
+                            <button type="button" class="btn btn-default col-xs-3 col-xs-offset-6" id="beginFight">Begin Fight</button>
+                        </div>
+                        <div id="nextDayButtons" style="display: none;">
+                            <button type="button" class="btn btn-default col-xs-3" id="prevDay" disabled="disabled">Prev Day</button>
+                            <button type="button" class="btn btn-default col-xs-3 col-xs-offset-6" id="nextDay">Next Day</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="col-xs-12"><h2>Player Status:</h2></div>
+                        <div class="col-xs-12 borderBox" id="peopleSummary">
+                            <label class="peopleStatusLabel">Alive</label>
+                            <div class="peopleStatusText" id="alivePeople"></div>
+                            <label class="peopleStatusLabel">Dead</label>
+                            <div class="peopleStatusText" id="deadPeople"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+<script type="text/template" data-template="districtTemplate">
+    <div class="row districtRow">
+        <div class="well well-sm col-xs-12">
+            <div class="districtContainer col-xs-12 col-lg-1">
+                <div class="verticalAlignName" style="text-align: center" id="districtName${dNum}">
+                    District ${dNum}
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-11 femaleBlockBorder">
+                <div class="genderContainer genderBorder col-xs-12 col-lg-1">
+                    <label class="verticalAlignName">Female</label>
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label class="col-sm-4 floatNone">First Name:</label>
+                    <input class="form-control col-sm-8 floatNone" id="firstNameFemale${dNum}">
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label class="col-sm-4 floatNone">Last Name:</label>
+                    <input class="form-control col-sm-8 floatNone" id="lastNameFemale${dNum}">
+                </div>
+                <div class="form-group col-xs-12 col-lg-2">
+                    <label class="col-sm-4 floatNone">Age:</label>
+                    <input class="form-control ageInput col-sm-8 floatNone" id="ageFemale${dNum}" type="number">
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-11">
+                <div class="genderContainer genderBorder col-xs-12 col-lg-1">
+                    <label class="verticalAlignName">Male</label>
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label class="col-sm-4 floatNone">First Name:</label>
+                    <input class="form-control col-sm-8 floatNone" id="firstNameMale${dNum}">
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label class="col-sm-4 floatNone">Last Name:</label>
+                    <input class="form-control col-sm-8 floatNone" id="lastNameMale${dNum}">
+                </div>
+                <div class="form-group col-xs-12 col-lg-2">
+                    <label class="col-sm-4 floatNone">Age:</label>
+                    <input class="form-control ageInput col-sm-8 floatNone" id="ageMale${dNum}" type="number">
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" data-template="statusTemplate">
+    <div id="${id}">
+        <div class="col-xs-7">${name}</div>
+        <div class="col-xs-5" id="${id}Kills">${kills}</div>
+    </div>
+</script>

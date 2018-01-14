@@ -1,5 +1,6 @@
 body {
 	padding-top: 80px;
+    padding-bottom: 20px;
 }
 
 .navbar-brand,
@@ -25,8 +26,8 @@ body {
 }
 
 label {
-    font-size: 14px !important;
-    font-weight: 300 !important;
+    font-size: 14px;
+    font-weight: 300;
 }
 
 @media (max-width: 1199px) {
@@ -84,6 +85,27 @@ label {
 
 .ageInput {
     width: 80px !important;
+}
+
+.fightLog {
+    white-space: pre-wrap;
+}
+
+.borderBox {
+    border: 1px solid #58697a;
+    border-radius: 2px;
+    padding: 8px 20px;
+    margin: 14px 0;
+}
+
+.peopleStatusLabel {
+    border-bottom: 1px solid #58697a;
+    font-size: 16px;
+    width: 100%;
+}
+
+.peopleStatusText {
+    font-size: 14px;
 }
 
 .floatNone {
