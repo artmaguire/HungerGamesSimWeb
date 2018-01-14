@@ -36,7 +36,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <annotationProcessors/>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
@@ -45,6 +44,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warSourceDirectory>/web</warSourceDirectory>
                 </configuration>
             </plugin>
@@ -52,6 +52,13 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-core -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
