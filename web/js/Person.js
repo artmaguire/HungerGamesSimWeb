@@ -6,8 +6,22 @@ function Person(districtNumber, gender) {
     this.statusID = '';
 }
 
+Person.Gender = Object.freeze({Female: "Female", Male: "Male"}); //gender enum
+Person.Action = Object.freeze({AddKill: "AddKill", Kill: "Kill"}); //gender enum
+
 Person.prototype.isAlive = function() {
     return this.alive;
+};
+
+Person.prototype.act = function(action) {
+    switch(action) {
+        case Person.Action.AddKill: { this.addKill(); break; }
+        case Person.Action.Kill: { this.kill(); break; }
+    }
+};
+
+Person.prototype.getGender = function() {
+    return this.gender;
 };
 
 Person.prototype.getKills = function() {

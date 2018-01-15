@@ -1,8 +1,9 @@
 var districtCount = 0;
 var districts = [];
 var dayLog = [];
-var dayNum = 0;
-var dayTotalNum = 0;
+var dayNum = -1;
+var dayTotalNum = -1;
+var gameOver = false;
 
 $( document ).ready(function() {
     var districtTpl = $('script[data-template="districtTemplate"]').text();
@@ -24,8 +25,8 @@ $( document ).ready(function() {
         $( '#alivePeople' ).empty();
         $( '#deadPeople' ).empty();
         for(var i = 0; i < districts.length; i++) {
-            createPersonStatus(districts[i], 'female');
-            createPersonStatus(districts[i], 'male');
+            createPersonStatus(districts[i], Person.Gender.Female);
+            createPersonStatus(districts[i], Person.Gender.Male);
         }
     }
 
@@ -53,8 +54,8 @@ $( document ).ready(function() {
         while (districtCount < 12) createNewDistrict();
 
         for (var i = 0; i < districts.length; i++) {
-            validatePerson(districts[i], 'female');
-            validatePerson(districts[i], 'male');
+            validatePerson(districts[i], Person.Gender.Female);
+            validatePerson(districts[i], Person.Gender.Male);
         }
     }
 
@@ -80,13 +81,6 @@ $( document ).ready(function() {
         console.dir(sendData);
 
         $.post('./AddPeople', { districtData : JSON.stringify(sendData)}, function( data ) {
-            /*var alivePeople = '';
-
-            for (var i = 0; i < districts.length; i++) {
-                var person = districts[i].getPerson('female');
-                alivePeople += female.getFirstName() + ' ' + districts
-            }*/
-
             setPeopleStatus();
 
             $( '#peopleForm' ).hide();
@@ -99,20 +93,55 @@ $( document ).ready(function() {
         $( '#fightScreen' ).hide();
     });
 
+    function processFightEvents(data) {
+        dayNum++;
+        dayTotalNum++;
+        data = JSON.parse(data);
+        console.dir(data);
+
+        var log = "Day " + (dayNum + 1) + "\n------------------------------\n";
+        $( '#fightLog' ).text(log);
+
+        for(var i = 0; i < data.length; i++) {
+            log += data[i].eventString;
+            (function (i) {
+                setTimeout(function () {
+                    $( '#fightLog' ).append(data[i].eventString);
+                    var actions = data[i].actions;
+                    for(var j = 0; j < actions.length; j++) {
+                        var a = actions[j];
+                        if(a.action === "EndGame") {
+                            gameOver = true;
+                            $( '#prevDay' ).removeAttr("disabled");
+                            $( '#restart' ).show();
+                        }
+                        else {
+                            var person = districts[a.district-1].getPerson(a.gender);
+                            person.act(a.action);
+                        }
+                    }
+                    if (i === (data.length - 1) && !gameOver) {
+                        $( '#prevDay' ).removeAttr("disabled");
+                        $( '#nextDay' ).removeAttr("disabled");
+                    }
+                }, 10 * (i + 1));
+            })(i);
+        }
+
+        dayLog.push(log);
+    }
+
     $( '#beginFight' ).click(function() {
         $.get('./BeginFight', function( data ) {
-            data = "Day " + dayNum + "\n------------------------------\n" + data;
-            console.log(data);
-            /*dayNum++;
-            dayTotalNum++;*/
-            dayLog.push(data);
-            $( '#fightLog' ).text(dayLog[dayNum]);
+            processFightEvents(data);
             $( '#beginFightButtons' ).hide();
             $( '#nextDayButtons' ).show();
         });
     });
 
     $( '#prevDay' ).click(function() {
+        if(dayNum === dayTotalNum && gameOver) $( '#nextDay' ).removeAttr("disabled");
+
         dayNum--;
         $( '#fightLog' ).text(dayLog[dayNum]);
 
@@ -123,19 +152,19 @@ $( document ).ready(function() {
         if (dayNum < dayTotalNum) {
             dayNum++;
             $( '#fightLog' ).text(dayLog[dayNum]);
-            if (dayNum === 1) $( '#prevDay' ).removeAttr("disabled");
+            $( '#prevDay' ).removeAttr("disabled");
+            if(dayNum === dayTotalNum && gameOver) $( '#nextDay' ).attr("disabled", "disabled");
         } else {
+            $( '#prevDay' ).attr("disabled", "disabled");
+            $( '#nextDay' ).attr("disabled", "disabled");
             $.get('./NextDay', function (data) {
-                $( '#prevDay' ).removeAttr("disabled");
-                dayNum++;
-                dayTotalNum++;
-                data = "Day " + dayNum + "\n------------------------------\n" + data;
-                console.log(data);
-                dayLog.push(data);
-                $( '#fightLog' ).text(dayLog[dayNum]);
-                $('#fightLog').text(data);
+                processFightEvents(data);
             });
         }
+    });
+
+    $( '#restart' ).click(function() {
+        window.location.replace("./");
     });
 });
 
@@ -147,8 +176,8 @@ var lastNames = ["Ruth", "Jackson", "Debra", "Allen", "Gerald", "Harris", "Raymo
 
 function randomFirstName(gender) {
     switch(gender) {
-        case 'female': return randValue(firstNamesFemale);
-        case 'male': return randValue(firstNamesMale);
+        case Person.Gender.Female: return randValue(firstNamesFemale);
+        case Person.Gender.Male: return randValue(firstNamesMale);
         default: return null;
     }
 }

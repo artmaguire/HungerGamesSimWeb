@@ -43,7 +43,7 @@ and open the template in the editor.
                     </div>
                 </div>
                 <div class="row" id="fightScreen" style="display:none;">
-                    <div class="col-xs-8">
+                    <div class="col-sm-8 col-xs-12">
                         <div class="col-xs-12"><h2>Game Events:</h2></div>
                         <div class="col-xs-12 fightLog borderBox" id="fightLog">The Contenders Take Their Places.</div>
                         <div id="beginFightButtons">
@@ -52,10 +52,10 @@ and open the template in the editor.
                         </div>
                         <div id="nextDayButtons" style="display: none;">
                             <button type="button" class="btn btn-default col-xs-3" id="prevDay" disabled="disabled">Prev Day</button>
-                            <button type="button" class="btn btn-default col-xs-3 col-xs-offset-6" id="nextDay">Next Day</button>
+                            <button type="button" class="btn btn-default col-xs-3 col-xs-offset-6" id="nextDay" disabled="disabled">Next Day</button>
                         </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-sm-4 col-xs-12">
                         <div class="col-xs-12"><h2>Player Status:</h2></div>
                         <div class="col-xs-12 borderBox" id="peopleSummary">
                             <label class="peopleStatusLabel">Alive</label>
@@ -63,6 +63,7 @@ and open the template in the editor.
                             <label class="peopleStatusLabel">Dead</label>
                             <div class="peopleStatusText" id="deadPeople"></div>
                         </div>
+                        <button class="btn btn-default col-xs-12" id="restart" style="display: none;">Restart</button>
                     </div>
                 </div>
             </div>
