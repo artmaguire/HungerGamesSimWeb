@@ -5,6 +5,8 @@
  */
 
 import com.artmaguire.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -34,11 +37,13 @@ public class BeginFightServlet extends HttpServlet {
         HttpSession session = request.getSession();
         BeginFight fight = (BeginFight) session.getAttribute("fight");
 
-        String result = fight.start();
+        ArrayList<FightEvent> result = fight.start();
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(result);
 
         response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
         response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-        response.getWriter().write(result);       // Write response body.
+        response.getWriter().write(json);       // Write response body.
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
