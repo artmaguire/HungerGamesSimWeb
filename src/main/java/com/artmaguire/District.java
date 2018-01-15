@@ -2,6 +2,8 @@ package com.artmaguire;
 
 //import java.util.ArrayList;
 
+import java.util.Objects;
+
 public class District {
     private String name;
     private int number;
@@ -43,5 +45,23 @@ public class District {
 
     public void setFemale(Person female) {
         this.female = female;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, number);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final District other = (District) obj;
+        return Objects.equals(this.name, other.name)
+                && Objects.equals(this.number, other.number);
     }
 }

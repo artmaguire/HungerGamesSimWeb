@@ -11,9 +11,6 @@ public class BeginFight {
     private ArrayList<Person> alive = new ArrayList<>();
     private ArrayList<Person> dead = new ArrayList<>();
 
-    private StringBuilder log = new StringBuilder();
-    StringBuilder dayLog = new StringBuilder();
-
     public BeginFight() {
     }
 
@@ -21,27 +18,31 @@ public class BeginFight {
         this.alive.add(p);
     }
 
-    public String start() {
-        logInfo("\n\n---------------------------------");
-        logInfo("Announcer: 'Welcome To Today's Match!'");
+    public ArrayList<FightEvent> start() {
+        ArrayList<FightEvent> events = new ArrayList<>();
+        StringBuilder startLog = new StringBuilder();
+
+        startLog.append(logInfo("Announcer: 'Welcome To Today's Match!'"));
         Date date = new java.util.Date();
-        logInfo(date.toString());
-        logInfo("\n");
+        startLog.append(logInfo(date.toString()));
+        startLog.append(logInfo("\n"));
+
         for(Person p : alive){
             p.setWeapon(weapons[randPos(weapons.length)]);
-            logInfo(p.getName() + " got: " + p.getWeapon());
+            startLog.append(logInfo(p.getName() + " got: " + p.getWeapon()));
         }
-        logInfo("---------------------------------");
+        startLog.append(logInfo("---------------------------------"));
+        events.add(new FightEvent(startLog.toString()));
 
-        return log.toString();
+        return events;
     }
 
-    public String nextDay() {
-        dayLog = new StringBuilder();
+    public ArrayList nextDay() {
+        ArrayList<FightEvent> events = new ArrayList<>();
         int i = 0;
 
         while (alive.size() > 1){
-            if (i == 5) return dayLog.toString();
+            if (i == 5) return events;
             int p1Pos = randPos(alive.size()); //Choose Random person p1
             int p2Pos;
 
@@ -51,18 +52,20 @@ public class BeginFight {
             Person p1 = alive.get(p1Pos);
             Person p2 = alive.get(p2Pos);
             if(Math.random() < 0.5){ //p1 Wins
-                processKill(p1, p2, p2Pos);
+                events.add(processKill(p1, p2, p2Pos));
             } else { //p2 Wins
-                processKill(p2, p1, p1Pos);
+                events.add(processKill(p2, p1, p1Pos));
             }
-            logInfo("");
             i++;
         }
 
         String endLog = end();
-        logInfo(endLog);
+        FightEvent endEvent = new FightEvent(logInfo(endLog));
+        FightAction fa = new FightAction(FightAction.Action.EndGame);
+        endEvent.addAction(fa);
+        events.add(endEvent);
 
-        return dayLog.toString();
+        return events;
     }
 
     private String end() {
@@ -82,15 +85,24 @@ public class BeginFight {
         return endLog.toString();
     }
 
-    private void processKill(Person killer, Person killed, int killedPos) {
+    private FightEvent processKill(Person killer, Person killed, int killedPos) {
         killer.addKill();
-        logInfo(killer.getName() + " kills " + killed.getName() + " with " + killer.getWeapon());
+        String eventString = logInfo(killer.getName() + " kills " + killed.getName() + " with " + killer.getWeapon());
         String killNumber = killer.getFirstName() + " Now Has " + killer.getKills();
-        if(killer.getKills() == 1) killNumber += " Kill!";
-        else killNumber += " Kills!";
-        logInfo(killNumber);
+        if(killer.getKills() == 1) killNumber += " Kill!\n";
+        else killNumber += " Kills!\n";
+        eventString += logInfo(killNumber);
+
+        FightEvent e = new FightEvent(eventString);
+        FightAction a1 = new FightAction(killed.getDistrict().getNumber(), killed.getGender(), FightAction.Action.Kill);
+        e.addAction(a1);
+        FightAction a2 = new FightAction(killer.getDistrict().getNumber(), killer.getGender(), FightAction.Action.AddKill);
+        e.addAction(a2);
+
         alive.remove(killedPos);
         dead.add(killed);
+
+        return e;
     }
 
     private int randPos(int size){
@@ -99,10 +111,11 @@ public class BeginFight {
         return r;
     }
 
-    private void logInfo(String info) {
-        log.append(info).append("\n");
-        dayLog.append(info).append("\n");
-        System.out.println(info);
+    private String logInfo(String info) {
+        info += "\n";
+        System.out.print(info);
+
+        return info;
     }
 }
 
